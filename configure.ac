@@ -96,6 +96,28 @@ AS_IF([test "$enable_http" != "no"], [
 AM_CONDITIONAL(OP_ENABLE_HTTP, [test "$enable_http" != "no"])
 AC_SUBST([openssl])
 
+dnl check for Ogg
+AS_IF([test "$HAVE_PKG_CONFIG" = "yes"],
+  dnl first try via pkg-config
+ [PKG_CHECK_MODULES([OGG],[ogg >= 1.3])],
+ [
+  dnl fall back to the old school test
+  XIPH_PATH_OGG(, AC_MSG_ERROR([
+    libogg is required to build this package!
+    please see http://www.xiph.org/ for how to
+    obtain a copy.
+  ]))
+  saved_CFLAGS="$CFLAGS"
+  saved_LIBS="$LIBS"
+  CFLAGS="$CFLAGS $OGG_CFLAGS"
+  LIBS="$LIBS $OGG_LIBS"
+  AC_CHECK_FUNC([ogg_stream_flush_fill],,[
+    AC_MSG_ERROR([newer libogg version (1.3 or later) required])
+  ])
+  CFLAGS="$saved_CFLAGS"
+  LIBS="$saved_LIBS"
+ ])
+
 PKG_CHECK_MODULES([DEPS], [ogg >= 1.3 opus >= 1.0.1])
 
 AC_ARG_ENABLE([fixed-point],

@@ -1,6 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 
-AM_CFLAGS = -I$(top_srcdir)/include $(DEPS_CFLAGS)
+AM_CFLAGS = -I$(top_srcdir)/include $(DEPS_CFLAGS) -lopus $(OGG_CFLAGS)
 
 dist_doc_DATA = COPYING AUTHORS README.md
 
@@ -27,7 +27,7 @@ endif
 
 examples_opusfile_example_SOURCES = examples/opusfile_example.c
 examples_seeking_example_SOURCES = examples/seeking_example.c
-examples_opusfile_example_LDADD = libopusurl.la libopusfile.la
+examples_opusfile_example_LDADD = $(OPUS_LIBS) $(OGG_LIBS) libopusurl.la libopusfile.la
 examples_seeking_example_LDADD = libopusurl.la libopusfile.la
 
 if OP_WIN32

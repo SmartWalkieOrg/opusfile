@@ -342,7 +342,7 @@ buf[base] = (val) & 0xff; \
 } while(0)
 
 static void comment_init(char **comments, int *length, const char *vendor_string) {
-    // The 'vendor' field should be the actual encoding library used
+    /* The 'vendor' field should be the actual encoding library used */
     int vendor_length = strlen(vendor_string);
     int user_comment_list_length = 0;
     int len = 8 + 4 + vendor_length + 4;
@@ -358,7 +358,7 @@ static void comment_init(char **comments, int *length, const char *vendor_string
 static void comment_pad(char **comments, int* length, int amount) {
     if (amount > 0) {
         char *p = *comments;
-        // Make sure there is at least amount worth of padding free, and round up to the maximum that fits in the current ogg segments
+        /* Make sure there is at least amount worth of padding free, and round up to the maximum that fits in the current ogg segments */
         int newlen = (*length + amount + 255) / 255 * 255 - 1;
         p = realloc(p, newlen);
         int i = 0;
@@ -413,7 +413,7 @@ int initRecorder(const char *path) {
     coding_rate = 8000;
   }
 
-  //   frame_size=frame_size/(48000/coding_rate);
+  /*   frame_size=frame_size/(48000/coding_rate); */
   if (rate != coding_rate) {
     fprintf(stderr, "Invalid rate\n");
     return 0;
@@ -661,7 +661,7 @@ int main(int _argc,const char **_argv){
     }
     fprintf(stderr, "i: %d res: %d\n", i, res);
     writeFrame(pcm_frame_2, 1920);
-    // fwrite(bytes, 1, res, fout);
+    /* fwrite(bytes, 1, res, fout); */
   }
 
   opus_decoder_destroy(decoder);
@@ -669,7 +669,7 @@ int main(int _argc,const char **_argv){
   cleanupRecorder();
 
   fclose(fin);
-  // fclose(fout);
+  /* fclose(fout); */
 
 
   if(_argc<2){

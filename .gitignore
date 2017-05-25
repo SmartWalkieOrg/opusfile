@@ -28,6 +28,7 @@ doc/html
 doc/latex
 examples/opusfile_example
 examples/seeking_example
+examples/opusaudio_example
 install-sh
 libopusfile-*.tar.*
 libtool
@@ -42,9 +43,14 @@ opusfile.pc
 opusfile-uninstalled.pc
 opusurl.pc
 opusurl-uninstalled.pc
+opusaudio.pc
+opusaudio-uninstalled.pc
 package_version
 stamp-h1
 test-driver
 unix/objs
 unix/opusfile_example
 unix/seeking_example
+unix/opusaudio_example
+*.opus
+.DS_Store
