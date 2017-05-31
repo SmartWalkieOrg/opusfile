@@ -22,13 +22,15 @@ libopusurl_la_LDFLAGS = -no-undefined \
  -version-info @OP_LT_CURRENT@:@OP_LT_REVISION@:@OP_LT_AGE@
 
 if OP_ENABLE_EXAMPLES
-noinst_PROGRAMS = examples/opusfile_example examples/seeking_example
+noinst_PROGRAMS = examples/opusfile_example examples/seeking_example examples/opusaudio
 endif
 
 examples_opusfile_example_SOURCES = examples/opusfile_example.c
 examples_seeking_example_SOURCES = examples/seeking_example.c
+examples_opusaudio_SOURCES = examples/opusaudio.c examples/opusaudio.h examples/log.h
 examples_opusfile_example_LDADD = $(OPUS_LIBS) $(OGG_LIBS) libopusurl.la libopusfile.la
 examples_seeking_example_LDADD = libopusurl.la libopusfile.la
+examples_opusaudio_LDADD = $(OPUS_LIBS) $(OGG_LIBS) libopusurl.la libopusfile.la
 
 if OP_WIN32
 if OP_ENABLE_HTTP
