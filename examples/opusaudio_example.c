@@ -17,13 +17,9 @@
 #if !defined(_POSIX_SOURCE)
 # define _POSIX_SOURCE 1
 #endif
-#include <stdio.h>
-#include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include <opusfile.h>
 #include <opus/opus.h>
-#include <ogg/ogg.h>
 #include <opusaudio.h>
 #if defined(_WIN32)
 # include "win32utf8.h"
@@ -91,7 +87,7 @@ int main(int _argc, const char **_argv) {
   stopRecording();
   fclose(fin);
 
-  fprintf(stdout, "\nnumber of convertedframes: %d", i);
+  fprintf(stdout, "number of converted frames: %d\n", i);
 
   return 0;
 }
