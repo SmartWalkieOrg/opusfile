@@ -53,26 +53,26 @@ int main(int _argc, const char **_argv) {
 #endif
 
   if(_argc != 3) {
-    fprintf(stderr,"Usage: %s <input.opus> <output.opus>\n", _argv[0]);
+    fprintf(stderr,"Usage: %s <input.opus> <output.opus>", _argv[0]);
     return EXIT_FAILURE;
   }
 
   inFile = _argv[1];
   fin = fopen(inFile, "rb");
   if (fin == NULL) {
-     fprintf(stderr, "failed to open input file: %s\n", strerror(errno));
+     fprintf(stderr, "\nfailed to open input file: %s", strerror(errno));
      return EXIT_FAILURE;
   }
 
   result = startRecording(_argv[2]);
   if (result != 1) {
-    fprintf(stderr, "\nresult: %s\n", opus_strerror(result));
+    fprintf(stderr, "\nresult: %s", opus_strerror(result));
     return EXIT_FAILURE;
   }
 
   decoder = opus_decoder_create(16000, 1, &error);
   if (error != 0) {
-    fprintf(stderr, "\nerror: %s\n", opus_strerror(error));
+    fprintf(stderr, "\nerror: %s", opus_strerror(error));
     return EXIT_FAILURE;
   }
 
@@ -81,7 +81,7 @@ int main(int _argc, const char **_argv) {
     fread(bytes, sizeof(unsigned char), 133, fin);
     res = opus_decode(decoder, bytes, 133, (short *)(pcm_frame_2), FRAME_SIZE, 0);
     if (res < 0) {
-      fprintf(stderr, "res: %d decoder: %s\n", res, opus_strerror(res));
+      fprintf(stderr, "\nres: %d decoder: %s", res, opus_strerror(res));
       return EXIT_FAILURE;
     }
     writeFrame(pcm_frame_2, 1920);
@@ -91,7 +91,7 @@ int main(int _argc, const char **_argv) {
   stopRecording();
   fclose(fin);
 
-  fprintf(stderr, "number of frames converted: %d\n", i);
+  fprintf(stdout, "\nnumber of convertedframes: %d", i);
 
   return 0;
 }
