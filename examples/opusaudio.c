@@ -287,13 +287,13 @@ void cleanupRecorder() {
     memset(&op, 0, sizeof(ogg_packet));
     memset(&og, 0, sizeof(ogg_page));
 
-    LOGD("Recording ends!!!");
+    //LOGD("Recording ends!!!");
 }
 
 int initRecorder(const char *path) {
     cleanupRecorder();
 
-    LOGD("in Recorder, path: %s", path);
+    //LOGD("in Recorder, path: %s", path);
     if (!path) {
         return 0;
     }
@@ -513,7 +513,7 @@ int writeFrame(uint8_t *framePcmBytes, unsigned int frameByteCount) {
         pages_out++;
     }
 
-    LOGD("last byte_written is %lld", bytes_written);
+    //LOGD("last byte_written is %lld", bytes_written);
     return 1;
 }
 //
