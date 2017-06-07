@@ -31,7 +31,7 @@ clean:
 	$(RM) -r objs
 	$(RM) -r  bin include lib share ssl
 	$(RM) -r $(DEP_DIRS)
-	$(RM) opusfile_example.exe seeking_example.exe
+	$(RM) opusfile_example.exe seeking_example.exe opusaudio_example.exe
 	$(RM) libopusfile.a libopusurl.a
 
 # Generate rules to download and verify each dependency.

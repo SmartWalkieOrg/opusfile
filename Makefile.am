@@ -22,15 +22,15 @@ libopusurl_la_LDFLAGS = -no-undefined \
  -version-info @OP_LT_CURRENT@:@OP_LT_REVISION@:@OP_LT_AGE@
 
 if OP_ENABLE_EXAMPLES
-noinst_PROGRAMS = examples/opusfile_example examples/seeking_example examples/opusaudio
+noinst_PROGRAMS = examples/opusfile_example examples/seeking_example examples/opusaudio_example
 endif
 
 examples_opusfile_example_SOURCES = examples/opusfile_example.c
 examples_seeking_example_SOURCES = examples/seeking_example.c
-examples_opusaudio_SOURCES = examples/opusaudio.c examples/opusaudio.h examples/log.h
-examples_opusfile_example_LDADD = $(OPUS_LIBS) $(OGG_LIBS) libopusurl.la libopusfile.la
+examples_opusaudio_example_SOURCES = examples/opusaudio_example.c
+examples_opusfile_example_LDADD = libopusurl.la libopusfile.la
 examples_seeking_example_LDADD = libopusurl.la libopusfile.la
-examples_opusaudio_LDADD = $(OPUS_LIBS) $(OGG_LIBS) libopusurl.la libopusfile.la
+examples_opusaudio_example_LDADD = $(OPUS_LIBS) $(OGG_LIBS) libopusurl.la libopusfile.la libopusaudio.la
 
 if OP_WIN32
 if OP_ENABLE_HTTP
@@ -39,6 +39,7 @@ libopusurl_la_LIBADD += -lws2_32 -lcrypt32
 endif
 examples_opusfile_example_SOURCES += examples/win32utf8.c examples/win32utf8.h
 examples_seeking_example_SOURCES += examples/win32utf8.c examples/win32utf8.h
+examples_opusaudio_example_SOURCES += examples/win32utf8.c examples/win32utf8.h
 endif
 
 pkgconfigdir = $(libdir)/pkgconfig
@@ -62,7 +63,9 @@ EXTRA_DIST = \
  win32/VS2015/opusfile_example.vcxproj \
  win32/VS2015/opusfile_example.vcxproj.filters \
  win32/VS2015/seeking_example.vcxproj \
- win32/VS2015/seeking_example.vcxproj.filters
+ win32/VS2015/seeking_example.vcxproj.filters \
+ win32/VS2015/opusaudio_example.vcxproj \
+ win32/VS2015/opusaudio_example.vcxproj.filters
 
 # Targets to build and install just the library without the docs
 opusfile install-opusfile: NO_DOXYGEN = 1

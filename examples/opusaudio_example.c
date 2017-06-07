@@ -22,6 +22,9 @@
 #include <errno.h>
 #include <string.h>
 #include <opusfile.h>
+#include <opus/opus.h>
+#include <ogg/ogg.h>
+#include <opusaudio.h>
 #if defined(_WIN32)
 # include "win32utf8.h"
 # undef fileno
@@ -130,6 +133,12 @@ static void make_wav_header(unsigned char _dst[44],ogg_int64_t _duration){
   }
 }
 
+#define FRAME_SIZE 960
+#define SAMPLE_RATE 16000
+#define CHANNELS 1
+#define ENCODER_SIZE 133
+#define MAX_BUFFER_SIZE 1920
+
 int main(int _argc,const char **_argv){
   OggOpusFile  *of;
   ogg_int64_t   duration;
@@ -140,7 +149,60 @@ int main(int _argc,const char **_argv){
 #if defined(_WIN32)
   win32_utf8_setup(&_argc,&_argv);
 #endif
-  if(_argc!=2){
+
+  char *inFile;
+  FILE *fin;
+  char *outFile;
+  FILE *fout;
+  opus_int16 in[FRAME_SIZE*CHANNELS];
+  opus_int16 out[FRAME_SIZE*CHANNELS];
+  unsigned char cbits[ENCODER_SIZE];
+  int nbBytes = 0;
+
+  inFile = _argv[2];
+  fin = fopen(inFile, "rb");
+  if (fin==NULL)
+  {
+     fprintf(stderr, "failed to open input file: %s\n", strerror(errno));
+     return EXIT_FAILURE;
+  }
+  unsigned char bytes[ENCODER_SIZE];
+  unsigned char pcm_frame_2[MAX_BUFFER_SIZE];
+
+  int result = startRecording(_argv[1]);
+
+  /*
+  outFile = _argv[1];
+  fout = fopen(outFile, "ab");
+  */
+  int error1;
+  OpusDecoder *decoder = opus_decoder_create(16000, 1, &error1);
+  fprintf(stderr, "OPUS_OK: %d error1: %d\n", OPUS_OK, error1);
+
+  int res = 0;
+  int i = 0;
+  while (!feof(fin)) {
+    i++;
+    fread(bytes, sizeof(unsigned char), 133, fin);
+    res = opus_decode(decoder, bytes, 133, pcm_frame_2, FRAME_SIZE, 0);
+    if (res<0) {
+      fprintf(stderr, "res: %d decoder: %s\n", res, opus_strerror(res));
+      return EXIT_FAILURE;
+    }
+    fprintf(stderr, "i: %d res: %d\n", i, res);
+    writeFrame(pcm_frame_2, 1920);
+    /* fwrite(bytes, 1, res, fout); */
+  }
+
+  opus_decoder_destroy(decoder);
+
+  stopRecording();
+
+  fclose(fin);
+  /* fclose(fout); */
+
+
+  if(_argc<2){
     fprintf(stderr,"Usage: %s <file.opus>\n",_argv[0]);
     return EXIT_FAILURE;
   }
@@ -356,12 +418,14 @@ int main(int _argc,const char **_argv){
         out[2*si+0]=(unsigned char)(pcm[si]&0xFF);
         out[2*si+1]=(unsigned char)(pcm[si]>>8&0xFF);
       }
+      /*
       if(!fwrite(out,sizeof(*out)*4*ret,1,stdout)){
         fprintf(stderr,"\nError writing decoded audio data: %s\n",
          strerror(errno));
         ret=EXIT_FAILURE;
         break;
       }
+      */
       nsamples+=ret;
       prev_li=li;
     }
