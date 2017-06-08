@@ -181,8 +181,10 @@ AC_CONFIG_FILES([
   Makefile
   opusfile.pc
   opusurl.pc
+  opusaudio.pc
   opusfile-uninstalled.pc
   opusurl-uninstalled.pc
+  opusaudio-uninstalled.pc
   doc/Doxyfile
 ])
 AC_CONFIG_HEADERS([config.h])

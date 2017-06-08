@@ -5,9 +5,8 @@ AM_CFLAGS = -I$(top_srcdir)/include $(DEPS_CFLAGS) -lopus $(OGG_CFLAGS)
 dist_doc_DATA = COPYING AUTHORS README.md
 
 opusincludedir = ${includedir}/opus
-opusinclude_HEADERS = include/opusfile.h
-
-lib_LTLIBRARIES = libopusfile.la libopusurl.la
+opusinclude_HEADERS = include/opusfile.h include/opusaudio.h
+lib_LTLIBRARIES = libopusfile.la libopusurl.la libopusaudio.la
 libopusfile_la_SOURCES = \
 	src/info.c \
 	src/internal.c src/internal.h \
@@ -19,6 +18,11 @@ libopusfile_la_LDFLAGS = -no-undefined \
 libopusurl_la_SOURCES = src/http.c src/internal.c src/internal.h
 libopusurl_la_LIBADD = libopusfile.la $(URL_DEPS_LIBS)
 libopusurl_la_LDFLAGS = -no-undefined \
+ -version-info @OP_LT_CURRENT@:@OP_LT_REVISION@:@OP_LT_AGE@
+
+libopusaudio_la_SOURCES = src/opusaudio.c src/log.h
+libopusaudio_la_LIBADD = libopusfile.la $(URL_DEPS_LIBS)
+libopusaudio_la_LDFLAGS = -no-undefined \
  -version-info @OP_LT_CURRENT@:@OP_LT_REVISION@:@OP_LT_AGE@
 
 if OP_ENABLE_EXAMPLES
@@ -43,7 +47,7 @@ examples_opusaudio_example_SOURCES += examples/win32utf8.c examples/win32utf8.h
 endif
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = opusfile.pc opusurl.pc
+pkgconfig_DATA = opusfile.pc opusurl.pc opusaudio.pc
 
 debug:
 	$(MAKE) CFLAGS="${CFLAGS} -O0 -ggdb -DOP_ENABLE_ASSERTIONS" all
@@ -51,8 +55,10 @@ debug:
 EXTRA_DIST = \
  opusfile.pc.in \
  opusurl.pc.in \
+ opusaudio.pc.in \
  opusfile-uninstalled.pc.in \
  opusurl-uninstalled.pc.in \
+ opusaudio-uninstalled.pc.in \
  doc/Doxyfile.in \
  doc/opus_logo.svg \
  doc/Makefile \
