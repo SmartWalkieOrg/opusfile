@@ -66,7 +66,7 @@ int main(int _argc, const char **_argv) {
     return EXIT_FAILURE;
   }
 
-  decoder = opus_decoder_create(16000, 1, &error);
+  decoder = opus_decoder_create(SAMPLE_RATE, CHANNELS, &error);
   if (error != 0) {
     fprintf(stderr, "\nerror: %s", opus_strerror(error));
     return EXIT_FAILURE;
@@ -74,13 +74,13 @@ int main(int _argc, const char **_argv) {
 
   while (!feof(fin)) {
     i++;
-    fread(bytes, sizeof(unsigned char), 133, fin);
-    res = opus_decode(decoder, bytes, 133, (short *)(pcm_frame_2), FRAME_SIZE, 0);
+    fread(bytes, sizeof(unsigned char), ENCODER_SIZE, fin);
+    res = opus_decode(decoder, bytes, ENCODER_SIZE, (short *)(pcm_frame_2), FRAME_SIZE, 0);
     if (res < 0) {
       fprintf(stderr, "\nres: %d decoder: %s", res, opus_strerror(res));
       return EXIT_FAILURE;
     }
-    writeFrame(pcm_frame_2, 1920);
+    writeFrame(pcm_frame_2, MAX_BUFFER_SIZE);
   }
 
   opus_decoder_destroy(decoder);
